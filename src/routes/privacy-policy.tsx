@@ -729,7 +729,10 @@ function PrivacyPolicyPage() {
         </div>
 
         <Panel className="mt-10" label="Registered entities">
-          <div className="grid gap-6 sm:grid-cols-2">
+          <p className="text-sm text-muted-foreground">
+            Founder: <span className="font-medium text-foreground">Ronald Jonathan</span>
+          </p>
+          <div className="mt-6 grid gap-6 sm:grid-cols-2">
             {entities.map((e) => (
               <div key={e.region}>
                 <p className="text-xs uppercase tracking-[0.18em] text-primary">{e.region}</p>
