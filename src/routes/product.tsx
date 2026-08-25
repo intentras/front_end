@@ -14,6 +14,9 @@ import {
   Zap,
 } from "lucide-react";
 
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { SiteHeader } from "@/components/site/SiteHeader";
+
 export const Route = createFileRoute("/product")({
   head: () => ({
     meta: [
@@ -147,54 +150,32 @@ function ProductPage() {
       <div className="fixed inset-0 bg-[linear-gradient(to_right,#1f1f2e0a_1px,transparent_1px),linear-gradient(to_bottom,#1f1f2e0a_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-gradient-to-b from-orange-600/10 via-orange-900/5 to-transparent blur-[120px] pointer-events-none" />
 
-      {/* Top Navigation */}
-      <nav className="sticky top-0 z-50 bg-[#070709]/80 backdrop-blur-md border-b border-zinc-800/80 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center shadow-[0_0_15px_rgba(255,85,0,0.4)]">
-              <span className="font-mono font-bold text-black text-lg">i</span>
-            </div>
-            <span className="font-bold text-xl tracking-tight text-white">
-              Intentras{" "}
-              <span className="text-xs font-mono font-normal text-orange-500 ml-2 tracking-widest uppercase border border-orange-500/30 bg-orange-950/40 px-2 py-0.5 rounded">
-                NVIDIA INCEPTION PROFILE
-              </span>
-            </span>
-          </div>
+      <SiteHeader />
 
-          <div className="hidden md:flex items-center space-x-8 text-xs font-mono text-gray-400 tracking-wider">
-            <a href="#overview" className="hover:text-orange-400 transition-colors">
-              OVERVIEW
-            </a>
-            <a href="#stack" className="hover:text-orange-400 transition-colors">
-              TECH STACK
-            </a>
-            <a href="#sdk-matrix" className="hover:text-orange-400 transition-colors">
-              NVIDIA MATRIX
-            </a>
-            <a href="#hardware" className="hover:text-orange-400 transition-colors">
-              COMPUTE
-            </a>
-            <a href="#roadmap" className="hover:text-orange-400 transition-colors">
-              ROADMAP
-            </a>
-          </div>
+      <main className="max-w-7xl mx-auto px-6 pt-28 pb-10 space-y-16 relative z-10">
+        {/* Section jump nav (page is a single scroll, keeps the anchors from the
+            original design without duplicating the site's global nav). */}
+        <nav
+          aria-label="On this page"
+          className="hidden md:flex items-center justify-center gap-8 text-xs font-mono text-gray-400 tracking-wider"
+        >
+          <a href="#overview" className="hover:text-orange-400 transition-colors">
+            OVERVIEW
+          </a>
+          <a href="#stack" className="hover:text-orange-400 transition-colors">
+            TECH STACK
+          </a>
+          <a href="#sdk-matrix" className="hover:text-orange-400 transition-colors">
+            NVIDIA MATRIX
+          </a>
+          <a href="#hardware" className="hover:text-orange-400 transition-colors">
+            COMPUTE
+          </a>
+          <a href="#roadmap" className="hover:text-orange-400 transition-colors">
+            ROADMAP
+          </a>
+        </nav>
 
-          <div className="flex items-center space-x-3">
-            <a
-              href="https://intentras.com"
-              target="_blank"
-              rel="noreferrer"
-              className="bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white font-mono text-xs font-semibold px-4 py-2.5 rounded flex items-center space-x-2 shadow-[0_0_20px_rgba(255,85,0,0.3)] transition-all"
-            >
-              <span>INTENTRAS.COM</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto px-6 py-10 space-y-16 relative z-10">
         {/* HERO SECTION */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center pt-4">
           <div className="lg:col-span-7 space-y-6">
@@ -214,6 +195,16 @@ function ProductPage() {
               Enterprise AI Infrastructure Control Plane engineered for continuous behavior
               enforcement, closed-loop automation, and accelerated GPU intelligence.
             </p>
+
+            <a
+              href="https://hub.intentras.com/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white font-mono text-xs font-semibold px-5 py-3 rounded shadow-[0_0_20px_rgba(255,85,0,0.3)] transition-all"
+            >
+              <span>CONNECT DASHBOARD</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
 
             <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-[#111116] border border-zinc-800/80 rounded-lg p-3.5 flex items-start space-x-3">
@@ -730,10 +721,7 @@ function ProductPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-900 bg-[#050507] py-8 text-center text-xs font-mono text-gray-600">
-        <p>© 2026 Intentras Inc. All rights reserved. Prepared for NVIDIA Inception Program.</p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
