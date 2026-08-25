@@ -338,7 +338,7 @@ function Index() {
             height={446}
             loading="lazy"
             decoding="async"
-            className="absolute inset-y-0 left-0 h-full w-1/2 object-cover opacity-45"
+            className="absolute inset-y-0 left-0 hidden h-full w-1/2 object-cover object-top opacity-45 lg:block"
           />
           <div
             className="absolute inset-0"
