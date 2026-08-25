@@ -261,7 +261,7 @@ function Index() {
             width={750}
             height={375}
             decoding="async"
-            className="absolute top-0 right-0 h-full w-full object-cover object-right opacity-70 lg:w-3/5"
+            className="absolute top-0 right-0 h-full w-full object-cover object-right opacity-80 brightness-125 lg:w-3/5"
           />
           <div
             className="absolute inset-0"
@@ -338,7 +338,7 @@ function Index() {
             height={446}
             loading="lazy"
             decoding="async"
-            className="absolute inset-y-0 left-0 hidden h-full w-1/2 object-cover object-top opacity-45 lg:block"
+            className="absolute inset-y-0 left-0 hidden h-full w-1/2 object-cover object-[50%_18%] opacity-60 brightness-125 lg:block"
           />
           <div
             className="absolute inset-0"
