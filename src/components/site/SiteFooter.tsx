@@ -18,7 +18,7 @@ const focusRing =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 export function SiteFooter() {
-  const [state, handleSubscribe] = useForm(NEWSLETTER_FORM_ID);
+  const [state, handleSubscribe, resetForm] = useForm(NEWSLETTER_FORM_ID);
 
   return (
     <footer className="border-t border-border/60 bg-card/40">
@@ -52,7 +52,16 @@ export function SiteFooter() {
             Product updates and agent infrastructure notes, roughly once a month.
           </p>
           {state.succeeded ? (
-            <p className="mt-4 text-sm text-primary">You're subscribed — welcome aboard.</p>
+            <div className="mt-4 flex items-center gap-3">
+              <p className="text-sm text-primary">You're subscribed — welcome aboard.</p>
+              <button
+                type="button"
+                onClick={resetForm}
+                className={`text-xs font-display uppercase tracking-[0.18em] text-muted-foreground underline-offset-4 hover:text-primary hover:underline ${focusRing}`}
+              >
+                Subscribe another
+              </button>
+            </div>
           ) : (
             <form onSubmit={handleSubscribe} className="mt-4 flex max-w-sm gap-2">
               <label htmlFor="footer-newsletter-email" className="sr-only">

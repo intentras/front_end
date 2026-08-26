@@ -42,7 +42,7 @@ const contactInfo = [
 ];
 
 export function ContactSection() {
-  const [state, handleSubmit] = useForm(CONTACT_FORM_ID);
+  const [state, handleSubmit, resetForm] = useForm(CONTACT_FORM_ID);
 
   return (
     <section
@@ -101,9 +101,18 @@ export function ContactSection() {
 
           <Panel label="Tell us what you're building">
             {state.succeeded ? (
-              <p className="text-sm text-muted-foreground">
-                Thanks — your message is in. Our team will follow up shortly.
-              </p>
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Thanks — your message is in. Our team will follow up shortly.
+                </p>
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className={`text-xs font-display uppercase tracking-[0.18em] text-primary underline-offset-4 hover:underline ${focusRing}`}
+                >
+                  Send another message
+                </button>
+              </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
