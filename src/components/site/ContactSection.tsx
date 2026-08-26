@@ -1,9 +1,16 @@
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useForm, ValidationError } from "@formspree/react";
 import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { Panel } from "@/components/site/Panel";
 
 const CONTACT_FORM_ID = "myegrldb";
+// Site key is public by design (it's embedded in every reCAPTCHA-protected
+// page). Verification happens server-side using the secret key, which is
+// configured in the Formspree form's own settings — this static site has no
+// backend of its own to hold that secret.
+const RECAPTCHA_SITE_KEY = "6LftcpktAAAAAKcbCkThDP7kpE2avm32ZH-CpS__";
 
 const focusRing =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
@@ -42,7 +49,30 @@ const contactInfo = [
 ];
 
 export function ContactSection() {
-  const [state, handleSubmit, resetForm] = useForm(CONTACT_FORM_ID);
+  const [state, formspreeSubmit, formspreeReset] = useForm(CONTACT_FORM_ID);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [captchaError, setCaptchaError] = useState(false);
+  // The reCAPTCHA widget only makes sense in a real browser (it needs to talk
+  // to Google's servers), and the underlying package doesn't render cleanly
+  // during server prerendering — so it's mounted client-side only.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    if (!recaptchaRef.current?.getValue()) {
+      e.preventDefault();
+      setCaptchaError(true);
+      return;
+    }
+    setCaptchaError(false);
+    formspreeSubmit(e);
+  }
+
+  function resetForm() {
+    recaptchaRef.current?.reset();
+    setCaptchaError(false);
+    formspreeReset();
+  }
 
   return (
     <section
@@ -182,6 +212,18 @@ export function ContactSection() {
                     errors={state.errors}
                     className="mt-1 text-xs text-destructive"
                   />
+                </div>
+                <div>
+                  {mounted ? (
+                    <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} theme="dark" />
+                  ) : (
+                    <div className="h-[78px] w-[304px] border border-border/70 bg-secondary/20" />
+                  )}
+                  {captchaError ? (
+                    <p className="mt-2 text-xs text-destructive">
+                      Please confirm you're not a robot before sending.
+                    </p>
+                  ) : null}
                 </div>
                 <button
                   type="submit"
