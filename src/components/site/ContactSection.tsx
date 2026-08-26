@@ -1,8 +1,9 @@
-import { useState, type FormEvent } from "react";
+import { useForm, ValidationError } from "@formspree/react";
 import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
-import { toast } from "sonner";
 
 import { Panel } from "@/components/site/Panel";
+
+const CONTACT_FORM_ID = "myegrldb";
 
 const focusRing =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
@@ -41,19 +42,7 @@ const contactInfo = [
 ];
 
 export function ContactSection() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const subject = encodeURIComponent(`Enquiry from ${name || "the Intentras site"}`);
-    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
-    window.location.href = `mailto:contact@intentras.com?subject=${subject}&body=${body}`;
-    toast.success("Opening your email client", {
-      description: "Send the drafted message and our team will follow up shortly.",
-    });
-  }
+  const [state, handleSubmit] = useForm(CONTACT_FORM_ID);
 
   return (
     <section
@@ -111,71 +100,93 @@ export function ContactSection() {
           </div>
 
           <Panel label="Tell us what you're building">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="contact-name"
-                    className="text-xs uppercase tracking-[0.18em] text-muted-foreground"
-                  >
-                    Name
-                  </label>
-                  <input
-                    id="contact-name"
-                    type="text"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Your name"
-                    className={`mt-2 ${fieldClass}`}
-                  />
+            {state.succeeded ? (
+              <p className="text-sm text-muted-foreground">
+                Thanks — your message is in. Our team will follow up shortly.
+              </p>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="contact-name"
+                      className="text-xs uppercase tracking-[0.18em] text-muted-foreground"
+                    >
+                      Name
+                    </label>
+                    <input
+                      id="contact-name"
+                      type="text"
+                      name="name"
+                      required
+                      placeholder="Your name"
+                      className={`mt-2 ${fieldClass}`}
+                    />
+                    <ValidationError
+                      prefix="Name"
+                      field="name"
+                      errors={state.errors}
+                      className="mt-1 text-xs text-destructive"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="contact-email"
+                      className="text-xs uppercase tracking-[0.18em] text-muted-foreground"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="contact-email"
+                      type="email"
+                      name="email"
+                      required
+                      placeholder="Your business email"
+                      className={`mt-2 ${fieldClass}`}
+                    />
+                    <ValidationError
+                      prefix="Email"
+                      field="email"
+                      errors={state.errors}
+                      className="mt-1 text-xs text-destructive"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label
-                    htmlFor="contact-email"
+                    htmlFor="contact-message"
                     className="text-xs uppercase tracking-[0.18em] text-muted-foreground"
                   >
-                    Email
+                    Message
                   </label>
-                  <input
-                    id="contact-email"
-                    type="email"
+                  <textarea
+                    id="contact-message"
+                    name="message"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your business email"
-                    className={`mt-2 ${fieldClass}`}
+                    rows={5}
+                    placeholder="What are you looking to build, connect, or scale?"
+                    className={`mt-2 resize-none ${fieldClass}`}
+                  />
+                  <ValidationError
+                    prefix="Message"
+                    field="message"
+                    errors={state.errors}
+                    className="mt-1 text-xs text-destructive"
                   />
                 </div>
-              </div>
-              <div>
-                <label
-                  htmlFor="contact-message"
-                  className="text-xs uppercase tracking-[0.18em] text-muted-foreground"
+                <button
+                  type="submit"
+                  disabled={state.submitting}
+                  className={`group inline-flex items-center gap-3 panel-clip bg-primary px-7 py-3.5 font-display text-sm font-semibold uppercase tracking-[0.18em] text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60 ${focusRing}`}
                 >
-                  Message
-                </label>
-                <textarea
-                  id="contact-message"
-                  required
-                  rows={5}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="What are you looking to build, connect, or scale?"
-                  className={`mt-2 resize-none ${fieldClass}`}
-                />
-              </div>
-              <button
-                type="submit"
-                className={`group inline-flex items-center gap-3 panel-clip bg-primary px-7 py-3.5 font-display text-sm font-semibold uppercase tracking-[0.18em] text-primary-foreground transition-opacity hover:opacity-90 ${focusRing}`}
-              >
-                Talk to Intentras
-                <ArrowRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </button>
-            </form>
+                  {state.submitting ? "Sending..." : "Talk to Intentras"}
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                </button>
+              </form>
+            )}
           </Panel>
         </div>
 

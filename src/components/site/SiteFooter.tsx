@@ -1,9 +1,10 @@
-import { useState, type FormEvent } from "react";
+import { useForm, ValidationError } from "@formspree/react";
 import { Link } from "@tanstack/react-router";
 import { Facebook, Linkedin, Send, Twitter, Youtube } from "lucide-react";
-import { toast } from "sonner";
 
 import { MediumIcon } from "@/components/site/MediumIcon";
+
+const NEWSLETTER_FORM_ID = "meajyvln";
 
 const socialLinks = [
   { label: "Facebook", href: "https://facebook.com", icon: Facebook },
@@ -17,16 +18,7 @@ const focusRing =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 export function SiteFooter() {
-  const [email, setEmail] = useState("");
-
-  function handleSubscribe(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!email.trim()) return;
-    toast.success("Subscribed", {
-      description: `We'll send infrastructure updates to ${email}.`,
-    });
-    setEmail("");
-  }
+  const [state, handleSubscribe] = useForm(NEWSLETTER_FORM_ID);
 
   return (
     <footer className="border-t border-border/60 bg-card/40">
@@ -59,27 +51,39 @@ export function SiteFooter() {
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">
             Product updates and agent infrastructure notes, roughly once a month.
           </p>
-          <form onSubmit={handleSubscribe} className="mt-4 flex max-w-sm gap-2">
-            <label htmlFor="footer-newsletter-email" className="sr-only">
-              Email address
-            </label>
-            <input
-              id="footer-newsletter-email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@company.com"
-              className={`h-11 min-w-0 flex-1 border border-border/70 bg-secondary/20 px-3 text-sm text-foreground placeholder:text-muted-foreground ${focusRing}`}
+          {state.succeeded ? (
+            <p className="mt-4 text-sm text-primary">You're subscribed — welcome aboard.</p>
+          ) : (
+            <form onSubmit={handleSubscribe} className="mt-4 flex max-w-sm gap-2">
+              <label htmlFor="footer-newsletter-email" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="footer-newsletter-email"
+                type="email"
+                name="email"
+                required
+                placeholder="you@company.com"
+                className={`h-11 min-w-0 flex-1 border border-border/70 bg-secondary/20 px-3 text-sm text-foreground placeholder:text-muted-foreground ${focusRing}`}
+              />
+              <button
+                type="submit"
+                disabled={state.submitting}
+                aria-label="Subscribe to newsletter"
+                className={`panel-clip flex h-11 w-11 shrink-0 items-center justify-center bg-primary text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60 ${focusRing}`}
+              >
+                <Send className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </form>
+          )}
+          {!state.succeeded ? (
+            <ValidationError
+              prefix="Email"
+              field="email"
+              errors={state.errors}
+              className="mt-1 text-xs text-destructive"
             />
-            <button
-              type="submit"
-              aria-label="Subscribe to newsletter"
-              className={`panel-clip flex h-11 w-11 shrink-0 items-center justify-center bg-primary text-primary-foreground transition-opacity hover:opacity-90 ${focusRing}`}
-            >
-              <Send className="h-4 w-4" aria-hidden="true" />
-            </button>
-          </form>
+          ) : null}
         </div>
 
         <div className="flex flex-col gap-3 lg:items-end">
