@@ -1,5 +1,4 @@
 import { Check, Minus, ArrowRight } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 
 const tiers = [
   {
@@ -12,6 +11,7 @@ const tiers = [
     audience: "For teams exploring agentic AI.",
     features: ["Up to 25 active agents", "3 workflow pipelines", "Shared runtime", "Email support"],
     highlight: false,
+    checkoutUrl: "https://buy.stripe.com/test_dRm14p8iufO95PB8f72ZO00",
   },
   {
     name: "Scale",
@@ -28,6 +28,7 @@ const tiers = [
       "SSO, RBAC & audit trails",
     ],
     highlight: true,
+    checkoutUrl: "https://buy.stripe.com/test_00wfZj0Q20Tfguf8f72ZO01",
   },
   {
     name: "Enterprise",
@@ -44,6 +45,7 @@ const tiers = [
       "24/7 SLA & compliance packs",
     ],
     highlight: false,
+    checkoutUrl: "https://buy.stripe.com/test_dRm00l8iueK50vh52V2ZO02",
   },
 ];
 
@@ -125,8 +127,10 @@ export function PricingSection() {
                 </li>
               ))}
             </ul>
-            <Link
-              to="/product"
+            <a
+              href={t.checkoutUrl}
+              target="_blank"
+              rel="noreferrer noopener"
               className={`group mt-9 inline-flex min-h-11 items-center justify-center gap-3 panel-clip px-6 py-3.5 font-display text-xs font-semibold uppercase tracking-[0.18em] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                 t.highlight
                   ? "bg-primary text-primary-foreground"
@@ -138,7 +142,7 @@ export function PricingSection() {
                 className="h-4 w-4 transition-transform group-hover:translate-x-1"
                 aria-hidden="true"
               />
-            </Link>
+            </a>
           </div>
         ))}
       </div>
