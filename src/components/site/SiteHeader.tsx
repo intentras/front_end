@@ -55,6 +55,12 @@ export function SiteHeader() {
         hash: current ? current.slice(1) : "",
         replace: true,
         resetScroll: false,
+        // This is a passive sync of the URL to match where the user already
+        // scrolled to — not a real navigation. Without this, the router's
+        // default hash behavior re-scrolls the section's top edge to align
+        // with the viewport top, producing a small upward "snap" every time
+        // the active section updates.
+        hashScrollIntoView: false,
       });
     };
 
